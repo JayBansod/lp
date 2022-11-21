@@ -1,0 +1,185 @@
+10)	Write a program to simulate Memory placement strategies – best fit, first fit.
+
+
+Best Fit:
+
+
+package SPOSpkg;
+import java.util.*;
+
+public class BestFit {
+	// Method to allocate memory to
+	// blocks as per Best fit algorithm
+	public static void BestFit(int blockSize[], int m,
+	int processSize[], int n)
+	{
+	// Stores block id of the
+	// block allocated to a process
+	int allocation[] = new int[n];
+
+	// Initially no block is assigned to any process
+	for (int i = 0; i < allocation.length; i++)
+	allocation[i] = -1;
+
+	// pick each process and find suitable blocks
+	// according to its size ad assign to it
+	for (int i = 0; i < n; i++)
+	{ 	int diff=1000;
+	int pos=-1;
+	for (int j = 0; j < m; j++)
+	{
+	if (blockSize[j] >= processSize[i])
+	{
+	int calDiff= blockSize[j]- processSize[i];
+
+	if(calDiff < diff) {
+	diff= calDiff;
+	pos=j;
+	}
+	}
+	}
+	// allocate block j to p[i] process
+	allocation[i] = pos;
+
+	// Reduce available memory in this block.
+	//blockSize[pos] -= processSize[i];
+	if(pos!=-1) {
+	blockSize[pos] = 0;}
+	}
+
+	System.out.println("Process No. Process Size	Block no.");
+	for (int i = 0; i < n; i++)
+	{
+	System.out.print(" " + (i+1) + " 		" +
+	processSize[i] + " 		");
+	if (allocation[i] != -1)
+	System.out.print(allocation[i] + 1);
+	else
+	System.out.print("Not Allocated");
+	System.out.println();
+	}
+	}
+
+	// Driver Code
+	public static void main(String[] args)
+	{
+	Scanner input = new Scanner(System.in);
+	System.out.println("Enter  total no. of blocks: ");
+	int m = input.nextInt();
+
+	System.out.println("Enter  total no. of processes: ");
+	int n = input.nextInt();
+
+	int blockSize[] = new int[m];
+	int processSize[] = new int[n];
+
+	for(int i=0; i<m; i++) {
+	System.out.println("Enter block size for block " +(i+1)+": ");
+	blockSize[i]=input.nextInt();
+	}
+
+	for(int i=0; i<n; i++) {
+	System.out.println("Enter process size for process " +(i+1)+": ");
+	processSize[i]=input.nextInt();
+	}
+
+
+
+	BestFit(blockSize, m, processSize, n);
+	}
+
+}
+
+
+
+First Fit:
+
+
+package SPOSpkg;
+import java.util.*;
+
+public class FirstFit {
+
+	public static void FirstFit(int blockSize[], int m,
+			int processSize[], int n)
+			{
+			// Stores block id of the
+			// block allocated to a process
+			int allocation[] = new int[n];
+
+			// Initially no block is assigned to any process
+			for (int i = 0; i < allocation.length; i++)
+			allocation[i] = -1;
+
+			// pick each process and find suitable blocks
+			// according to its size ad assign to it
+			for (int i = 0; i < n; i++)
+			{
+			for (int j = 0; j < m; j++)
+			{
+			if (blockSize[j] >= processSize[i])
+			{
+			// allocate block j to p[i] process
+			allocation[i] = j;
+
+			// Reduce available memory in this block.
+			//blockSize[j] -= processSize[i];
+			blockSize[j] = 0;
+
+			break;
+			}
+			}
+			}
+
+			System.out.println("Process No. Process Size   Block no.");
+			for (int i = 0; i < n; i++)
+			{
+			System.out.print(" " + (i+1) + " 		" +processSize[i] + " 		");
+			if (allocation[i] != -1)
+			System.out.print(allocation[i] + 1);
+			else
+			System.out.print("Not Allocated");
+			System.out.println();
+			}
+			}
+
+			// Driver Code
+			public static void main(String[] args)
+			{
+			Scanner input = new Scanner(System.in);
+			System.out.println("Enter  total no. of blocks: ");
+			int m = input.nextInt();
+
+			System.out.println("Enter  total no. of processes: ");
+			int n = input.nextInt();
+
+			int blockSize[] = new int[m];
+			int processSize[] = new int[n];
+
+			for(int i=0; i<m; i++) {
+			System.out.println("Enter block size for block " +(i+1)+": ");
+			blockSize[i]=input.nextInt();
+			}
+
+			for(int i=0; i<n; i++) {
+			System.out.println("Enter process size for process " +(i+1)+": ");
+			processSize[i]=input.nextInt();
+			}
+
+
+
+			FirstFit(blockSize, m, processSize, n);
+			}
+
+
+}
+
+
+eg:
+
+Block		Jobs
+200	-	20
+30	-	200
+700	-	500
+50	-	50
+

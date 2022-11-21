@@ -1,0 +1,181 @@
+13)	"Write a program to simulate Page replacement algorithm. 
+	1. FIFO 2. OPTIMAL
+
+	Input reference String :- 2 3 2 1 5 2 4 5 3 2 5 2  
+	No. of frames are:- 3
+	"
+
+FIFO:
+
+
+package SPOSpkg;
+
+import java.io.*;
+import java.util.*;
+public class FIFO {
+public static void main(String[] args) throws IOException
+    {
+        
+        Scanner sc = new Scanner(System.in);
+        int frames,reference_length, pointer = 0, pagehit = 0, pagefault = 0;
+        int buffer[];
+        int reference[];
+        int memory_layout[][];
+
+        System.out.println("Please enter the number of Frames: ");
+        frames = sc.nextInt();
+
+        System.out.println("Please enter the length of the Reference string: ");
+        reference_length = sc.nextInt();
+
+        reference = new int[reference_length];
+        memory_layout = new int[reference_length][frames];
+        buffer = new int[frames];
+        for(int j = 0; j < frames; j++) {
+            buffer[j] = -1;
+        }
+        System.out.println("Please enter the reference string: ");
+        for(int i = 0; i < reference_length; i++)
+        {
+            reference[i] = sc.nextInt();
+        }
+        System.out.println();
+        
+        for(int i = 0; i < reference_length; i++)
+        {
+         int search = -1;
+         for(int j = 0; j < frames; j++)
+         {
+          if(buffer[j] == reference[i])
+          {
+           search = j;
+           pagehit++;
+           break;
+          }
+         }
+         if(search == -1)
+         {
+          buffer[pointer] = reference[i];
+          pagefault++;
+          pointer++;
+          if(pointer == frames)
+           pointer = 0;
+         }
+         for(int j = 0; j < frames; j++)
+             memory_layout[i][j] = buffer[j];
+        }
+
+        for(int i = 0; i < frames; i++)
+        {
+        	
+            for(int j = 0; j < reference_length; j++)
+                System.out.printf("%3d ",memory_layout[j][i]);
+            System.out.println();
+        }
+        System.out.println("The number of Faults: " + pagefault);
+        System.out.println("The number of Hits: " + pagehit);
+        System.out.println("Hit Ratio: " + (float)((float)pagehit/reference_length));}
+
+}
+
+
+Optimal:
+
+
+package SPOSpkg;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+class optimal
+{
+public static void main(String[] args) throws IOException, InterruptedException
+{
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+int frames, pointer = 0, hit = 0, fault = 0,ref_len;
+boolean isFull = false;
+int buffer[];
+int reference[];
+int mem_layout[][];
+System.out.println("Please enter the number of Frames: ");
+frames = Integer.parseInt(br.readLine());
+System.out.println("Please enter the length of the Reference string:");
+ref_len = Integer.parseInt(br.readLine());
+reference = new int[ref_len];
+mem_layout = new int[ref_len][frames];
+buffer = new int[frames];
+for(int j = 0; j < frames; j++)
+buffer[j] = -1;
+System.out.println("Please enter the reference string: ");
+for(int i = 0; i < ref_len; i++)
+{
+reference[i] = Integer.parseInt(br.readLine());
+}
+System.out.println();
+for(int i = 0; i < ref_len; i++)
+{
+int search = -1;
+for(int j = 0; j < frames; j++)
+{
+if(buffer[j] == reference[i])
+{
+search = j;
+hit++;
+break;
+}
+}
+if(search == -1)
+{
+if(isFull)
+{
+int index[] = new int[frames];
+boolean index_flag[] = new boolean[frames];
+for(int j = i + 1; j < ref_len; j++)
+{
+for(int k = 0; k < frames; k++)
+{
+if((reference[j] == buffer[k]) && (index_flag[k] == false))
+{
+index[k] = j;
+index_flag[k] = true;
+break;
+}
+}
+}
+int max = index[0];
+pointer = 0;
+if(max == 0)
+max = 200;
+for(int j = 0; j < frames; j++)
+{
+if(index[j] == 0)
+index[j] = 200;
+if(index[j] > max)
+{
+max = index[j];
+pointer = j;
+}
+}
+}
+buffer[pointer] = reference[i];
+fault++;
+if(!isFull)
+{
+pointer++;
+if(pointer == frames)
+{
+pointer = 0;
+isFull = true;
+}
+}
+}
+for(int j = 0; j < frames; j++)
+mem_layout[i][j] = buffer[j];
+}
+
+System.out.println("The number of Hits: " + hit);
+System.out.println("Hit Ratio: " + (float)((float)hit/ref_len));
+System.out.println("The number of Faults: " + fault);
+}
+}
+	

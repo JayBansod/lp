@@ -1,0 +1,329 @@
+12)	"Write a program to simulate Page replacement algorithm. 
+	1. FIFO 2. LRU
+
+	Input reference String :- 2 3 2 1 5 2 4 5 3 2 5 2  
+	No. of frames are:- 3
+	"
+
+
+package SPOSpkg;
+
+import java.util.*;
+
+public class FIFO_LRU
+
+{
+
+    public static void main (String[] args) {
+
+        
+
+        int str[] = new int[30];
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("enter the length of referance string ;");
+
+        int size = sc.nextInt();
+
+        System.out.println("enter the reference string");
+
+        for (int i=0;i<size;i++)
+
+        {
+
+          str[i]= sc.nextInt();
+
+        }
+
+        System.out.println("enter the number of frames");
+
+        int no_of_frame = sc.nextInt();
+
+        int frame[] = new int[no_of_frame];
+
+        int array[][]=new int[no_of_frame][2];
+
+        for (int i=0;i<no_of_frame;i++)
+
+        {
+
+            frame[i]=-1;
+
+        }
+
+        int flag=0,pagehit=0,cur=0,pagefault=0;
+
+        /***/
+
+        int choice;
+
+        System.out.println("\nEnter your choice :");
+
+        System.out.println("1) FIFO");      
+
+        System.out.println("2) LRU");     
+
+        System.out.println("3) Exit");  
+
+        choice=sc.nextInt();
+
+        /***/
+
+        switch(choice)
+
+        {
+
+            case 1:
+
+                    for (int i=0; i<size ; i++ )
+
+                    {
+
+                        for(int j=0;j<no_of_frame;j++)
+
+                        {
+
+                                if(frame[j]==str[i]) 
+
+                                {
+
+                                  flag=1;  
+
+                                }
+
+                        }
+
+                        
+
+                        if(flag==1)
+
+                        {
+
+                            pagehit++;
+
+                            flag=0;
+
+                        }
+
+                        else
+
+                        {
+
+                            pagefault++;
+
+            
+
+                            if(cur<no_of_frame)
+
+                            {
+
+                                frame[cur]=str[i];
+
+                                cur++;
+
+                                for(int k=0;k<no_of_frame;k++)
+
+                                {
+
+                                    System.out.print(frame[k]+ " ");
+
+                                }
+
+                                    System.out.println();
+
+                                flag=0;
+
+                            }
+
+                            else
+
+                            {
+
+                                    cur=0;
+
+                                    frame[cur]=str[i];
+
+                                    for(int k=0;k<no_of_frame;k++)
+
+                                    {
+
+                                        System.out.print(frame[k]+ " ");
+
+                                    }
+
+                                        System.out.println();                 
+
+                                    cur++;
+
+                                    flag=0;
+
+                                }
+
+                            }
+
+                     
+
+                        }
+
+                    break;
+
+            case 2:
+
+                    for (int i=0; i<size ; i++ )
+
+                    {
+
+                        int j;
+
+                        for(j=0;j<no_of_frame;j++)
+
+                        {
+
+                                if(frame[j]==str[i]) 
+
+                                {
+
+                                  flag=1; 
+
+                                  break;
+
+                                }
+
+                        }
+
+                        
+
+                        if(flag==1)
+
+                        {
+
+                            pagehit++;
+
+                                int pos=i;
+
+                                array[j][0]=i;
+
+                                 for(int k=0;k<no_of_frame;k++)
+
+                                {
+
+                                    System.out.print(frame[k]+ " ");
+
+                                }
+
+                                System.out.println();
+
+                            flag=0;
+
+                        }
+
+                        else
+
+                        {       
+
+                                int ptr =0,f=0;
+
+                                for(int p=0;p<no_of_frame;p++)
+
+                                {
+
+                                    if(frame[p]==-1)
+
+                                    {
+
+                                        ptr=p;
+
+                                        f=1;
+
+                                        break;
+
+                                    }
+
+                                }
+
+                                if(f==1)
+
+                                {
+
+                                    pagefault++;
+
+                                    frame[ptr]=str[i];
+
+                                    int pos=i,fg=0;
+
+                                           array[ptr][0]=pos;
+
+                                            array[ptr][1]=0;
+
+                                }
+
+                                else
+
+                                {
+
+                                    int min=0;
+
+                                    int tmp=array[0][0];
+
+                                    for(int l=0;l<no_of_frame;l++)
+
+                                    {
+
+                                        if(tmp>=array[l][0])
+
+                                        {
+
+                                            tmp=array[l][0];
+
+                                            min=l;
+
+                                        }
+
+                                    }
+
+                                cur=min;
+
+                                pagefault++;
+
+                                int pos=i,fg=0;
+
+                                frame[cur]=str[i];
+
+                               array[cur][0]=i;
+
+                                array[cur][1]=0;
+
+                                }
+
+                                for(int k=0;k<no_of_frame;k++)
+
+                                {
+
+                                    System.out.print(frame[k]+ " ");
+
+                                }
+
+                                    System.out.println();
+
+                                flag=0;
+
+                        }
+
+                 
+
+                    }
+
+                    break;
+
+        }
+
+        /****/
+
+        System.out.println("pagehit :"+pagehit);
+
+        System.out.println("pagefault :"+pagefault);
+
+    }
+
+}
